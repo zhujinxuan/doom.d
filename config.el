@@ -63,13 +63,48 @@
   (treemacs-follow-mode t)
   )
 
-(setq-default
-          org-journal-dir "~/org/journal/"
-          org-journal-file-format "%Y-%m-%d"
-          org-journal-date-prefix "#+TITLE: "
-          org-journal-date-format "%A, %B %d %Y")
-
 (use-package! evil-snipe
   :config
   (setq evil-snipe-scope 'whole-visible)
 )
+
+(defun org-journal-find-location ()
+  ;; Open today's journal, but specify a non-nil prefix argument in order to
+  ;; inhibit inserting the heading; org-capture will insert the heading.
+  (org-journal-new-entry t)
+  (unless (eq org-journal-file-type 'daily)
+    (org-narrow-to-subtree))
+  (goto-char (point-max)))
+
+
+(use-package! org-journal
+  :config
+  (setq
+   org-journal-dir "~/org/journal/"
+   org-journal-file-format "%Y-%m-%d"
+   org-journal-date-prefix "#+TITLE: "
+   org-journal-date-format "%A, %B %d %Y"
+   org-journal-time-prefix "* "
+   org-journal-carryover-items "TODO=\"TODO\""
+   )
+  (setq org-capture-templates
+        (mapcar (lambda (template)
+                  (cond ((equal "j" (car template))
+                         '( "j" "Journal entry" entry (function org-journal-find-location)
+                            "* TODO %?\n%l\n%i"
+                            :prepend t
+                            :jump-to-captured t
+                            :immediate-finish t
+                            ))
+                        (t template))
+                  )
+                org-capture-templates)
+        )
+
+  )
+(use-package! php-mode
+  :config
+  (format-all-mode -1)
+  )
+
+(map! :i "A-DEL" #'evil-delete-backward-word)
