@@ -29,6 +29,7 @@
 
 (use-package! neuron-mode
   ; Enable link autocompletion globally
+  :mode "zettelkasten/.+\\.md\\'"
   :hook (neuron-mode . company-neuron-setup)
   :init
   (map! :leader
@@ -87,3 +88,6 @@
 
 (setq-default neuron-id-format 'sluggify)
 (setq-default neuron-rib-server-port 5050)
+
+(setq-default neuron-show-ids 't)
+(setq-default neuron-generate-on-save 't)

@@ -108,3 +108,13 @@
   )
 
 (map! :i "A-DEL" #'evil-delete-backward-word)
+(setq-default ispell-aspell-data-dir "~/.nix-profile/lib/aspell")
+(setq-default ispell-aspell-dict-dir "~/.nix-profile/lib/aspell")
+
+(setq +format-on-save-enabled-modes
+     '(not emacs-lisp-mode
+           sql-mode
+           tex-mode
+           latex-mode
+           org-msg-edit-mode
+           php-mode))
