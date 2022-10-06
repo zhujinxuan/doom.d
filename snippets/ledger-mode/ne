@@ -1,0 +1,10 @@
+# -*- mode: ledger -*-
+# name: new timeclotck entry
+# key: ne
+# --
+`
+(let ((yy (yas/new-timeclock-last-line )))
+(setq-local yas-ne-local-list yy)
+(car yy))
+` $0
+`(nth 1 yas-ne-local-list)`

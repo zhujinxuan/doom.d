@@ -77,6 +77,12 @@
   (goto-char (point-max)))
 
 
+(use-package! lsp
+  :config
+   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
+   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]node_modules\\'")
+   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]build\\'")
+  )
 (use-package! org-journal
   :config
   (setq
@@ -84,8 +90,8 @@
    org-journal-file-format "%Y-%m-%d"
    org-journal-date-prefix "#+TITLE: "
    org-journal-date-format "%A, %B %d %Y"
-   org-journal-time-prefix "* "
-   org-journal-carryover-items "TODO=\"TODO\""
+   org-journal-time-prefix "** "
+   org-journal-carryover-items "-daily+TODO=\"TODO\"|keep"
    )
   (setq org-capture-templates
         (mapcar (lambda (template)
@@ -100,21 +106,54 @@
                   )
                 org-capture-templates)
         )
+)
+(defun pc/new-buffer-p ()
+  (not (file-exists-p (buffer-file-name))))
+(defun pc/insert-journal-template ()
+  (let ((template-file (expand-file-name "templates/daily.org" org-directory)))
+      (when (pc/new-buffer-p)
+        (save-excursion
+          (goto-char (point-max))
+          (beginning-of-line)
+          (insert-file-contents template-file)
+          (newline-and-indent)
+          ))))
+(add-hook 'org-journal-after-entry-create-hook #'pc/insert-journal-template)
 
-  )
-(use-package! php-mode
-  :config
-  (format-all-mode -1)
-  )
+(setq-hook! 'php-mode-hook +format-with-lsp nil)
 
 (map! :i "A-DEL" #'evil-delete-backward-word)
 (setq-default ispell-aspell-data-dir "~/.nix-profile/lib/aspell")
 (setq-default ispell-aspell-dict-dir "~/.nix-profile/lib/aspell")
+(setq-default ledger-binary-path "~/.nix-profile/bin/hledger")
 
-(setq +format-on-save-enabled-modes
-     '(not emacs-lisp-mode
-           sql-mode
-           tex-mode
-           latex-mode
-           org-msg-edit-mode
-           php-mode))
+;; (setq +format-on-save-enabled-modes
+;;      '(not emacs-lisp-mode
+;;            sql-mode
+;;            tex-mode
+;;            latex-mode
+;;            org-msg-edit-mode
+;;            ))
+(use-package! ledger-mode
+  :config
+  (set-company-backend! 'ledger-mode 'company-dabbrev)
+  )
+
+(add-to-list 'auto-mode-alist '("\\.timeclock\\'" . ledger-mode))
+(setq yas-snippet-dirs (append yas-snippet-dirs
+                               '("~/.doom.d/snippets"))) ;; replace with your folder for snippets
+
+(defun yas/new-timeclock-last-line ()
+  "Save Last Line"
+  (let ((last-line-text (save-excursion
+                (beginning-of-line 0)
+                (thing-at-point 'line t)
+                ))
+        )
+
+ (list
+          (concat "i" (string-remove-prefix "o" (string-trim last-line-text) ))
+      last-line-text)
+  )
+
+    )
