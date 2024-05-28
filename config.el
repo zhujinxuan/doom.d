@@ -124,11 +124,6 @@
 (setq-default ispell-aspell-dict-dir "~/.nix-profile/lib/aspell")
 (setq-default ledger-binary-path "~/.nix-profile/bin/hledger")
 
-(use-package! ledger-mode
-  :config
-  (set-company-backend! 'ledger-mode 'company-dabbrev)
-  )
-
 (add-to-list 'auto-mode-alist '("\\.timeclock\\'" . ledger-mode))
 (setq yas-snippet-dirs (append yas-snippet-dirs
                                '("~/.doom.d/snippets"))) ;; replace with your folder for snippets
