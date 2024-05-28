@@ -4,3 +4,4 @@
 tmp/
 custom.el
 private/*
+flycheck_config.el
