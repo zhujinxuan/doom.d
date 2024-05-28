@@ -66,7 +66,7 @@
 (use-package! evil-snipe
   :config
   (setq evil-snipe-scope 'whole-visible)
-)
+  )
 
 (defun org-journal-find-location ()
   ;; Open today's journal, but specify a non-nil prefix argument in order to
@@ -79,9 +79,9 @@
 
 (use-package! lsp
   :config
-   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
-   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]node_modules\\'")
-   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]build\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]node_modules\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]build\\'")
   )
 (use-package! org-journal
   :config
@@ -106,34 +106,24 @@
                   )
                 org-capture-templates)
         )
-)
+  )
 (defun pc/new-buffer-p ()
   (not (file-exists-p (buffer-file-name))))
 (defun pc/insert-journal-template ()
   (let ((template-file (expand-file-name "templates/daily.org" org-directory)))
-      (when (pc/new-buffer-p)
-        (save-excursion
-          (goto-char (point-max))
-          (beginning-of-line)
-          (insert-file-contents template-file)
-          (newline-and-indent)
-          ))))
+    (when (pc/new-buffer-p)
+      (save-excursion
+        (goto-char (point-max))
+        (beginning-of-line)
+        (insert-file-contents template-file)
+        (newline-and-indent)
+        ))))
 (add-hook 'org-journal-after-entry-create-hook #'pc/insert-journal-template)
 
-(setq-hook! 'php-mode-hook +format-with-lsp nil)
-
-(map! :i "A-DEL" #'evil-delete-backward-word)
 (setq-default ispell-aspell-data-dir "~/.nix-profile/lib/aspell")
 (setq-default ispell-aspell-dict-dir "~/.nix-profile/lib/aspell")
 (setq-default ledger-binary-path "~/.nix-profile/bin/hledger")
 
-;; (setq +format-on-save-enabled-modes
-;;      '(not emacs-lisp-mode
-;;            sql-mode
-;;            tex-mode
-;;            latex-mode
-;;            org-msg-edit-mode
-;;            ))
 (use-package! ledger-mode
   :config
   (set-company-backend! 'ledger-mode 'company-dabbrev)
@@ -146,14 +136,37 @@
 (defun yas/new-timeclock-last-line ()
   "Save Last Line"
   (let ((last-line-text (save-excursion
-                (beginning-of-line 0)
-                (thing-at-point 'line t)
-                ))
+                          (beginning-of-line 0)
+                          (thing-at-point 'line t)
+                          ))
         )
 
- (list
-          (concat "i" (string-remove-prefix "o" (string-trim last-line-text) ))
-      last-line-text)
-  )
-
+    (list
+     (concat "i" (string-remove-prefix "o" (string-trim last-line-text) ))
+     last-line-text)
     )
+
+  )
+(setq-default org-babel-load-languages '((restclient . t) (emacs-lisp . t)))
+(defun synchronize-theme ()
+  "Synchronize theme based on the sun rise and sun set."
+  (interactive)
+  (let* ((light-theme 'doom-one-light)
+         (dark-theme 'doom-one)
+         (start-time-light-theme 6)
+         (end-time-light-theme 18)
+         (hour (string-to-number (substring (current-time-string) 11 13)))
+         (next-theme (if (member hour (number-sequence start-time-light-theme end-time-light-theme))
+                         light-theme dark-theme)))
+    (when (not (equal doom-theme next-theme))
+      (setq doom-theme next-theme)
+      (load-theme next-theme))))
+
+(run-with-timer 0 3600 'synchronize-theme)
+
+
+(set-formatter! 'prettier-php  '(npx "prettier" "--stdin-filepath" filepath "--parser=php"
+                                 (apheleia-formatters-js-indent "--use-tabs" "--tab-width")) :modes '(php-mode))
+
+;; (after! lsp-haskell
+;;   (setq lsp-haskell-formatting-provider "fourmolu"))

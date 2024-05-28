@@ -23,10 +23,10 @@
        company           ; the ultimate code completion backend
        helm              ; the *other* search engine for love and life
        ;;ido             ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       (ivy +fuzzy +prescient) ; a search engine for love and life
 
        :ui
-       ;;deft             ; notational velocity for Emacs
+       ;;deft            ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
@@ -36,10 +36,10 @@
        ;;hydra
        ;;indent-guides     ; highlighted indent columns
        (ligatures +fira)   ; ligatures and symbols to make your code pretty again
-       minimap           ; show a map of the code on the side
+       minimap             ; show a map of the code on the side
        modeline            ; snazzy, Atom-inspired modeline, plus API
-       nav-flash         ; blink cursor line after big motions
-       ;;neotree           ; a project drawer, like NERDTree for vim
+       nav-flash           ; blink cursor line after big motions
+       neotree             ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
@@ -59,11 +59,11 @@
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
        multiple-cursors  ; editing in many places at once
-       ;;objed             ; text object editing for the innocent
+       ;;objed           ; text object editing for the innocent (incompat with evil)
        ;;parinfer          ; turn lisp into python, sort of
        ;;rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
-       ;;word-wrap         ; soft wrapping with language-aware indent
+       word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
        dired             ; making dired pretty [functional]
@@ -84,7 +84,6 @@
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
-       neuron
        grammarly
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
@@ -98,7 +97,7 @@
        (lsp +peek)
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
-       ;;pass              ; password manager for nerds
+       pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
@@ -106,6 +105,7 @@
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
+       tree-sitter         ; Syntax and parsing, sitting in a tree...
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
@@ -113,6 +113,7 @@
 
        :lang
        graphql
+       scad
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
        cc                ; C > C++ == 1
@@ -154,11 +155,11 @@
        (php +lsp)          ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       ;;python            ; beautiful is better than ugly
+       (python +lsp +pyright +tree-sitter)       ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
-       ;;rest              ; Emacs as a REST client
+       (rest +jq)          ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        rust                ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
@@ -184,7 +185,7 @@
        everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
-       ;;twitter           ; twitter client https://twitter.com/vnought
+       twitter           ; twitter client https://twitter.com/vnought
 
        :config
        ;;literate
